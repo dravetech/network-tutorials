@@ -48,7 +48,7 @@ Then you will have to execute the following commands:
 Now that everything is in place let's clone the repository where the tutorial lives and try to start the test lab.
 
     git clone https://github.com/dravetech/network-tutorials.git
-    cd network-tutorials/tutorial-0-building-env
+    cd network-tutorials/labs/lab1
     vagrant up
 
 The last command will initialize the lab. To see the description of the lab check the contents of the file ``tutorial-0-building-lab/Vagrantfile``. You should be able to connect to the vEOS and the JunOS box with the commands ``vagrant ssh eos`` and ``vagrant ssh junos`` respectively.
