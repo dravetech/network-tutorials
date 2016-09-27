@@ -1,0 +1,19 @@
+---
+- name: veos
+  box: vEOS-lab-4.16.6M
+  forwarded_ports:
+    - name: https
+      guest: 443
+      host: 12443
+  links:
+    - name: link1
+    - name: link2
+- name: junos
+  box: juniper/ffp-12.1X47-D20.7-packetmode
+  forwarded_ports:
+    - name: ssh
+      guest: 22
+      host: 12203
+  links:
+    - name: link1
+    - name: link2

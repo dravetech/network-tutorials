@@ -1,0 +1,53 @@
+<p>In this tutorial we are just going to see we can connect to the devices via their respective APIs and retrieve information.</p>
+<h2 id="requirements">Requirements</h2>
+<pre><code>pip install -r requirements.txt</code></pre>
+<h1 id="getting-information">Getting information</h1>
+<h2 id="junos">JunOS</h2>
+<pre><code>from jnpr.junos import Device
+junos = Device(host=&#39;127.0.0.1&#39;, user=&#39;vagrant&#39;, port=12203)
+junos.open()
+junos_facts = junos.facts
+print(junos_facts)
+junos.close()</code></pre>
+<h2 id="eos">EOS</h2>
+<pre><code>import pyeapi
+connection = pyeapi.client.connect(
+    transport=&#39;https&#39;,
+    host=&#39;127.0.0.1&#39;,
+    username=&#39;vagrant&#39;,
+    password=&#39;vagrant&#39;,
+    port=12443,
+)
+eos = pyeapi.client.Node(connection)
+eos_facts = eos.run_commands([&#39;show version&#39;])
+print(eos_facts)</code></pre>
+<h1 id="doing-small-changes">Doing small changes</h1>
+<h2 id="junos-1">JunOS</h2>
+<pre><code>from jnpr.junos import Device
+from jnpr.junos.utils.config import Config
+
+junos = Device(host=&#39;127.0.0.1&#39;, user=&#39;vagrant&#39;, port=12203)
+junos.open()
+
+print(junos.facts[&#39;hostname&#39;])
+junos.bind(cu=Config)
+junos.cu.lock()
+junos.cu.load(&quot;system {host-name new-hostname;}&quot;, format=&quot;text&quot;, merge=True)
+junos.cu.commit()
+junos.cu.unlock()
+junos.facts_refresh()
+print(junos.facts[&#39;hostname&#39;])
+junos.close()</code></pre>
+<h2 id="eos-1">EOS</h2>
+<pre><code>import pyeapi
+connection = pyeapi.client.connect(
+    transport=&#39;https&#39;,
+    host=&#39;127.0.0.1&#39;,
+    username=&#39;vagrant&#39;,
+    password=&#39;vagrant&#39;,
+    port=12443,
+)
+eos = pyeapi.client.Node(connection)
+print(eos.run_commands([&#39;show hostname&#39;])[0][&#39;hostname&#39;])
+eos.run_commands([&#39;configure&#39;, &#39;hostname a-new-hostname&#39;])
+print(eos.run_commands([&#39;show hostname&#39;])[0][&#39;hostname&#39;])</code></pre>

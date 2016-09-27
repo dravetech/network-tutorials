@@ -90,3 +90,5 @@ ENV/
 
 .DS_Store
 *.swp
+
+.vagrant

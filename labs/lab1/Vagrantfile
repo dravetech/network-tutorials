@@ -1,24 +1,63 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-Vagrant.configure(2) do |config|
+
+# Specify minimum Vagrant version and Vagrant API version
+Vagrant.require_version ">= 1.6.0"
+VAGRANTFILE_API_VERSION = "2"
+
+# Plugins we require
+required_plugins = %w(vagrant-junos vagrant-vbguest)
+
+##### START Helper functions
+def install_ssh_key()
+  puts "Adding ssh key to the ssh agent"
+  puts "ssh-add #{Vagrant.source_root}/keys/vagrant"
+  system "ssh-add #{Vagrant.source_root}/keys/vagrant"
+end
+
+def install_plugins(required_plugins)
+  plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
+  if not plugins_to_install.empty?
+    puts "Installing plugins: #{plugins_to_install.join(' ')}"
+    if system "vagrant plugin install #{plugins_to_install.join(' ')}"
+      exec "vagrant #{ARGV.join(' ')}"
+    else
+      abort "Installation of one or more plugins has failed. Aborting."
+    end
+  end
+end
+##### END Helper functions
+
+# Install ssh key
+install_ssh_key
+
+# Check certain plugins are installed
+install_plugins required_plugins
+
+# Require YAML module
+require 'yaml'
+ 
+# Read YAML file with box details
+hosts = YAML.load_file('hosts.yaml')
+
+# Lab definition begins here
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vbguest.auto_update = false
 
-  config.vm.define "eos" do |eos|
-    eos.vm.box = "vEOS-lab-4.16.6M"
+  # Iterate through entries in YAML file
+  hosts.each do |host|
+    config.vm.define host["name"] do |srv|
+      srv.vm.box = host["box"]
 
-    eos.vm.network :forwarded_port, guest: 443, host: 12443, id: 'https'
+      host["forwarded_ports"].each do |port|
+      srv.vm.network :forwarded_port, guest: port["guest"], host: port["host"], id: port["name"]
+      end
 
-    eos.vm.network "private_network", virtualbox__intnet: "link_1", ip: "169.254.1.11", auto_config: false
-    eos.vm.network "private_network", virtualbox__intnet: "link_2", ip: "169.254.1.11", auto_config: false
+      host["links"].each do |link|
+      srv.vm.network "private_network", virtualbox__intnet: link["name"], ip: "169.254.1.11", auto_config: false
+      end
+
+    end
   end
-
-  config.vm.define "junos" do |junos|
-    junos.vm.box = "juniper/ffp-12.1X47-D20.7-packetmode"
-
-    junos.vm.network :forwarded_port, guest: 22, host: 12203, id: 'ssh'
-
-    junos.vm.network "private_network", virtualbox__intnet: "link_1", ip: "169.254.1.11", auto_config: false
-    junos.vm.network "private_network", virtualbox__intnet: "link_2", ip: "169.254.1.11", auto_config: false
-  end
-
 end
+

@@ -20,14 +20,6 @@ To install python follow the instructions for your operating system. To verify p
 
 To install Vagrant install first VirtualBox and then Vagrant. In both cases follow the instructions for your operating system.
 
-After vagrant is installed we are going to start by installing a couple of plugins for vagrant, to do so, open your terminal and execute:
-
-    vagrant plugin install vagrant-junos
-    vagrant plugin install vagrant-host-shell
-    vagrant plugin install vagrant-vbguest
-
-![vagrant_plugins](content/vagrant_plugins.png)
-
 ## vagrant boxes
 
 Now we are going to need a few boxes, these boxes will help us provision clean labs every time we need them. To support the following tutorials we will use a box containining vEOS and another one containing JunOS. The main reason for this is because they are the only ones that provide them without needing to pay or contact some sales representative.
@@ -51,7 +43,7 @@ Now that everything is in place let's clone the repository where the tutorial li
     cd network-tutorials/labs/lab1
     vagrant up
 
-The last command will initialize the lab. To see the description of the lab check the contents of the file ``tutorial-0-building-lab/Vagrantfile``. You should be able to connect to the vEOS and the JunOS box with the commands ``vagrant ssh eos`` and ``vagrant ssh junos`` respectively.
+The last command will initialize the lab. To see the description of the lab check the contents of the file ``labs/lab1/Vagrantfile``. You should be able to connect to the vEOS and the JunOS box with the commands ``vagrant ssh eos`` and ``vagrant ssh junos`` respectively.
 
 When you are done with the lab you can destroy it to free up resources with ``vagrant destroy``.
 
