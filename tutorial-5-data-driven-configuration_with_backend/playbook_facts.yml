@@ -19,15 +19,14 @@
     - name: Check BGP sessions are healthy
       assert:
         that:
-          - item.value.is_up
-        msg: "{{ item.key }} is down"
-      with_dict: "{{ napalm_facts.ansible_facts.bgp_neighbors.global.peers }}"
-      tags: [print_action]
-    - name: Check BGP sessions are receiving prefixes
+          - napalm_facts.ansible_facts.bgp_neighbors.global.peers[hostvars[item.value.attributes.connects_to.split(':')[0]]['interfaces'][item.value.attributes.connects_to.split(':')[1]]['ipv6'][0].split('/')[0]].is_up
+        msg: "{{ hostvars[item.value.attributes.connects_to.split(':')[0]]['interfaces'][item.value.attributes.connects_to.split(':')[1]]['ipv6'][0].split('/')[0] }} is down" 
+      with_dict: "{{ interfaces }}"
+      when: "{{ item.value.attributes.link_type == 'fabric' }}"
+    - name: check
       assert:
         that:
-          - item.value.address_family.ipv6.received_prefixes > 0
-        msg: "{{ item.key }} is not receiving any prefixes"
-      with_dict: "{{ napalm_facts.ansible_facts.bgp_neighbors.global.peers }}"
-      tags: [print_action]
-
+          - napalm_facts.ansible_facts.bgp_neighbors.global.peers[hostvars[item.value.attributes.connects_to.split(':')[0]]['interfaces'][item.value.attributes.connects_to.split(':')[1]]['ipv6'][0].split('/')[0]].address_family.ipv6.received_prefixes > 0
+        msg: "{{ hostvars[item.value.attributes.connects_to.split(':')[0]]['interfaces'][item.value.attributes.connects_to.split(':')[1]]['ipv6'][0].split('/')[0] }} is not receiving any prefixes"
+      with_dict: "{{ interfaces }}"
+      when: "{{ item.value.attributes.link_type == 'fabric' }}"
