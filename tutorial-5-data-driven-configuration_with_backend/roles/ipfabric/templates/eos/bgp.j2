@@ -1,0 +1,19 @@
+route-map EXPORT-LO0 permit 10
+   match interface Loopback0
+
+no router bgp
+router bgp {{ asn }}
+   router-id {{ router_id }}
+   redistribute connected route-map EXPORT-LO0
+
+{% for interface, interface_data in interfaces.items() if interface_data.attributes.link_type == "fabric" %}
+    {% set peer, iface = interface_data.attributes.connects_to.split(":") %}
+    {% set peer_ip = hostvars[peer]['interfaces'][iface]['ipv6'][0].split('/')[0] %}
+    {% set peer_asn = hostvars[peer]['asn'] %}
+     neighbor {{ peer_ip }} remote-as {{ peer_asn }}
+     neighbor {{ peer_ip }} description {{ interface_data.attributes.connects_to }}
+     address-family ipv6
+       neighbor {{ peer_ip }} activate
+
+{% endfor %}
+

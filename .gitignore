@@ -92,3 +92,4 @@ ENV/
 *.swp
 
 .vagrant
+.compiled

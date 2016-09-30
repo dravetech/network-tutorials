@@ -1,0 +1,16 @@
+ipv6 unicast-routing
+
+{% for interface, interface_data in interfaces.items() %}
+
+default interface {{ interface }}
+interface {{ interface }}
+  description {{ interface_data.attributes.get('connects_to', 'loopback') }}
+  {{ 'no switchport' if not interface_data.attributes.link_type == "loopback" else "" }}
+
+  {% for address in interface_data.ipv6 %}
+    ipv6 address {{ address if interface_data.attributes.link_type != "loopback" else "{}/128".format(address.split('/')[0]) }}
+  {% endfor %}
+
+{% endfor %}
+
+{% include 'bgp.j2' %}

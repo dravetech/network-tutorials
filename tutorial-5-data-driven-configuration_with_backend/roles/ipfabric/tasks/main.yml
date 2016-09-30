@@ -1,0 +1,7 @@
+---
+- name: Configure IP fabric
+  template:
+    src: "{{ os }}/ipfabric.j2"
+    dest: "{{ host_dir }}/ipfabric.conf"
+  changed_when: False
+  when: commit_changes == 0

@@ -1,0 +1,33 @@
+---
+- name: Get facts
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars:
+
+  tasks:
+    - name: get facts from device
+      napalm_get_facts:
+        hostname: "{{ host }}"
+        username: "{{ user }}"
+        dev_os: "{{ os }}"
+        password: "{{ password }}"
+        optional_args:
+          port: "{{ port }}"
+        filter: ['bgp_neighbors']
+      register: napalm_facts
+    - name: Check BGP sessions are healthy
+      assert:
+        that:
+          - item.value.is_up
+        msg: "{{ item.key }} is down"
+      with_dict: "{{ napalm_facts.ansible_facts.bgp_neighbors.global.peers }}"
+      tags: [print_action]
+    - name: Check BGP sessions are receiving prefixes
+      assert:
+        that:
+          - item.value.address_family.ipv6.received_prefixes > 0
+        msg: "{{ item.key }} is not receiving any prefixes"
+      with_dict: "{{ napalm_facts.ansible_facts.bgp_neighbors.global.peers }}"
+      tags: [print_action]
+

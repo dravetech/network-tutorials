@@ -1,0 +1,42 @@
+routing-options {
+    router-id {{ router_id }};
+    autonomous-system {{ asn }};
+}
+
+policy-options {
+    policy-statement EXPORT_LO0 {
+        from interface lo0.0;
+        then accept;
+    }
+    policy-statement PERMIT_ALL {
+        from protocol bgp;
+        then accept;
+    }
+}
+
+protocols {
+    replace:
+    bgp {
+        import PERMIT_ALL;
+        export [ EXPORT_LO0 PERMIT_ALL ];
+  }
+}
+
+{% for interface, interface_data in interfaces.items() if interface_data.attributes.link_type == "fabric" %}
+    {% set peer, iface = interface_data.attributes.connects_to.split(":") %}
+    {% set peer_ip = hostvars[peer]['interfaces'][iface]['ipv6'][0].split('/')[0] %}
+    {% set peer_asn = hostvars[peer]['asn'] %}
+
+protocols {
+    bgp {
+        group peers {
+            neighbor {{ peer_ip }} {
+                description {{ interface_data.attributes.connects_to }};
+                peer-as {{ peer_asn }};
+            }
+        }
+    }
+}
+
+{% endfor %}
+
