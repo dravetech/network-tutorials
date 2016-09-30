@@ -1,0 +1,51 @@
+{% for interface in interfaces %}
+
+interfaces {
+    replace:
+    {{ interface.name }} {
+        unit 0 {
+            family inet6 {
+                address {{ interface.ip_address }};
+            }
+        }
+    }
+}
+
+{% endfor %}
+
+routing-options {
+    router-id {{ router_id }};
+    autonomous-system {{ asn }};
+}
+
+policy-options {
+    policy-statement EXPORT_LO0 {
+        from interface lo0.0;
+        then accept;
+    }
+    policy-statement PERMIT_ALL {
+        from protocol bgp;
+        then accept;
+    }
+}
+
+protocols {
+    replace:
+    bgp {
+        import PERMIT_ALL;
+        export [ EXPORT_LO0 PERMIT_ALL ];
+  }
+}
+
+{% for peer in peers %}
+protocols {
+    bgp {
+        group peers {
+            neighbor {{ peer.ip }} {
+                peer-as {{ peer.asn }};
+            }
+        }
+    }
+}
+{% endfor %}
+
