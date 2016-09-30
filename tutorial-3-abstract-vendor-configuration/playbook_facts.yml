@@ -1,0 +1,23 @@
+---
+- name: Get facts
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars:
+
+  tasks:
+    - name: get facts from device
+      napalm_get_facts:
+        hostname: "{{ host }}"
+        username: "{{ user }}"
+        dev_os: "{{ os }}"
+        password: "{{ password }}"
+        optional_args:
+          port: "{{ port }}"
+        filter: ['facts']
+      register: napalm_facts
+    - name: Facts
+      debug:
+        msg: "{{ napalm_facts.ansible_facts.facts|to_nice_json }}"
+      tags: [print_action]
+
