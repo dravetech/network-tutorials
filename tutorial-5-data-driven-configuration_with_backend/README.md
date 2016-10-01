@@ -59,20 +59,21 @@ nsot attributes add --site-id 1 --resource-name network --name type
 nsot networks add --site-id 1 --cidr 2001:db8:b33f::/64 -a type=loopbacks
 
 nsot attributes add --site-id 1 --resource-name interface --name link_type
-nsot attributes add --site-id 1 --resource-name interface --name connects_to --allow-empty
+nsot attributes add --site-id 1 --resource-name interface --name connects_to_device
+nsot attributes add --site-id 1 --resource-name interface --name connects_to_iface
 
-nsot interfaces add --site-id 1 --device 1 --name lo0 --addresses 2001:db8:b33f::100/128 -a link_type=loopback
-nsot interfaces add --site-id 1 --device 2 --name lo0 --addresses 2001:db8:b33f::101/128 -a link_type=loopback
+nsot interfaces add --site-id 1 --device 1 --name lo0 --addresses 2001:db8:b33f::100/128 -a link_type=loopback -a connects_to_device=loopback -a connects_to_iface=lo0
+nsot interfaces add --site-id 1 --device 2 --name lo0 --addresses 2001:db8:b33f::101/128 -a link_type=loopback -a connects_to_device=loopback -a connects_to_iface=lo0
 
 nsot networks add --site-id 1 --cidr 2001:db8:caf3::/64 -a type=ptp
 nsot networks add --site-id 1 --cidr 2001:db8:caf3::/127 -a type=ptp
 nsot networks add --site-id 1 --cidr 2001:db8:caf3::2/127 -a type=ptp
 
-nsot interfaces add --site-id 1 --device 1 --name et1 -a link_type=fabric -a connects_to=rtr01:ge-0/0/1 -c 2001:db8:caf3::
-nsot interfaces add --site-id 1 --device 1 --name et2 -a link_type=fabric -a connects_to=rtr01:ge-0/0/2 -c 2001:db8:caf3::2
+nsot interfaces add --site-id 1 --device 1 --name et1 -a link_type=fabric -a connects_to_device=rtr01 -a connects_to_iface=ge-0/0/1 -c 2001:db8:caf3::
+nsot interfaces add --site-id 1 --device 1 --name et2 -a link_type=fabric -a connects_to_device=rtr01 -a connects_to_iface=ge-0/0/2 -c 2001:db8:caf3::2
 
-nsot interfaces add --site-id 1 --device 2 --name ge-0/0/1 -a link_type=fabric -a connects_to=rtr00:et1 -c 2001:db8:caf3::1
-nsot interfaces add --site-id 1 --device 2 --name ge-0/0/2 -a link_type=fabric -a connects_to=rtr00:et2 -c 2001:db8:caf3::3
+nsot interfaces add --site-id 1 --device 2 --name ge-0/0/1 -a link_type=fabric -a connects_to_device=rtr00 -a connects_to_iface=et1 -c 2001:db8:caf3::1
+nsot interfaces add --site-id 1 --device 2 --name ge-0/0/2 -a link_type=fabric -a connects_to_device=rtr00 -a connects_to_iface=et2 -c 2001:db8:caf3::3
 
 
 Getting information

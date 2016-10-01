@@ -4,7 +4,7 @@ ipv6 unicast-routing
 
 default interface {{ interface }}
 interface {{ interface }}
-  description {{ interface_data.attributes.get('connects_to', 'loopback') }}
+  description {{ interface_data.attributes.connects_to_device }}:{{ interface_data.attributes.connects_to_iface }}
   {{ 'no switchport' if not interface_data.attributes.link_type == "loopback" else "" }}
 
   {% for address in interface_data.ipv6 %}

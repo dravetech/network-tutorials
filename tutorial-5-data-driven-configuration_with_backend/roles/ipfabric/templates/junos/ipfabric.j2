@@ -3,7 +3,7 @@
 interfaces {
     replace:
     {{ interface }} {
-        description {{ interface_data.attributes.get('connects_to', 'loopback') }};
+        description {{ interface_data.attributes.connects_to_device }}:{{ interface_data.attributes.connects_to_iface }};
         unit 0 {
             family inet6 {
   {% for address in interface_data.ipv6 %}
