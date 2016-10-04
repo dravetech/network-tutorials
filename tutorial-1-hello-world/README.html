@@ -1,0 +1,76 @@
+<ul>
+<li><a href="#goals">Goals</a></li>
+<li><a href="#instructions">Instructions</a>
+<ul>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#getting-information">Getting information</a>
+<ul>
+<li><a href="#junos">JunOS</a></li>
+<li><a href="#eos">EOS</a></li>
+</ul></li>
+<li><a href="#doing-small-changes">Doing small changes</a>
+<ul>
+<li><a href="#junos-1">JunOS</a></li>
+<li><a href="#eos-1">EOS</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+<h1 id="goals">Goals</h1>
+<p>In this tutorial we are going to:</p>
+<ol>
+<li>connect to the devices in via their respective APIs</li>
+<li>retrieve information from the devices such as the serial number, model, etc.</li>
+<li>perform a simple change on the device; change the hostname.</li>
+</ol>
+<h1 id="instructions">Instructions</h1>
+<h2 id="getting-information">Getting information</h2>
+<h3 id="junos">JunOS</h3>
+<pre><code>from jnpr.junos import Device
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
+junos = Device(host=&#39;127.0.0.1&#39;, user=&#39;vagrant&#39;, port=12203)
+junos.open()
+junos_facts = junos.facts
+pp.pprint(junos_facts)
+junos.close()</code></pre>
+<h3 id="eos">EOS</h3>
+<pre><code>import pyeapi
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+connection = pyeapi.client.connect(transport=&#39;https&#39;, host=&#39;127.0.0.1&#39;, username=&#39;vagrant&#39;, password=&#39;vagrant&#39;, port=12443,)
+eos = pyeapi.client.Node(connection)
+eos_facts = eos.run_commands([&#39;show version&#39;])
+pp.pprint(eos_facts)</code></pre>
+<h2 id="doing-small-changes">Doing small changes</h2>
+<h3 id="junos-1">JunOS</h3>
+<pre><code>from jnpr.junos import Device
+from jnpr.junos.utils.config import Config
+
+junos = Device(host=&#39;127.0.0.1&#39;, user=&#39;vagrant&#39;, port=12203)
+junos.open()
+
+print(junos.facts[&#39;hostname&#39;])
+junos.bind(cu=Config)
+junos.cu.lock()
+junos.cu.load(&quot;system {host-name new-hostname;}&quot;, format=&quot;text&quot;, merge=True)
+junos.cu.commit()
+junos.cu.unlock()
+junos.facts_refresh()
+print(junos.facts[&#39;hostname&#39;])
+junos.close()</code></pre>
+<h3 id="eos-1">EOS</h3>
+<pre><code>import pyeapi
+connection = pyeapi.client.connect(
+    transport=&#39;https&#39;,
+    host=&#39;127.0.0.1&#39;,
+    username=&#39;vagrant&#39;,
+    password=&#39;vagrant&#39;,
+    port=12443,
+)
+eos = pyeapi.client.Node(connection)
+print(eos.run_commands([&#39;show hostname&#39;])[0][&#39;hostname&#39;])
+eos.run_commands([&#39;configure&#39;, &#39;hostname a-new-hostname&#39;])
+print(eos.run_commands([&#39;show hostname&#39;])[0][&#39;hostname&#39;])</code></pre>
+<h1 id="summary">Summary</h1>

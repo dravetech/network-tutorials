@@ -1,0 +1,19 @@
+devices:
+  rtr00:
+    os: eos
+    host: 127.0.0.1
+    domain: acme.com
+    user: vagrant
+    password: vagrant
+    port: '12443'
+    asn: '65001'
+    router_id: 10.1.1.1
+  rtr01:
+    os: junos
+    host: 127.0.0.1
+    domain: acme.com
+    user: vagrant
+    password: ''
+    port: '12203'
+    asn: '65002'
+    router_id: 10.1.1.2

@@ -1,0 +1,19 @@
+{% for interface, interface_data in interfaces.items() %}
+
+interfaces {
+    replace:
+    {{ interface }} {
+        description {{ interface_data.attributes.connects_to_device }}:{{ interface_data.attributes.connects_to_iface }};
+        unit 0 {
+            family inet6 {
+  {% for address in interface_data.ipv6 %}
+    address {{ address if interface_data.attributes.link_type != "loopback" else "{}/128".format(address.split('/')[0]) }};
+  {% endfor %}
+            }
+        }
+    }
+}
+
+{% endfor %}
+
+{% include 'bgp.j2' %}

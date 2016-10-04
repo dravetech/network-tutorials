@@ -1,43 +1,51 @@
-In this tutorial we are just going to see we can connect to the devices via their respective APIs, retrieve information and perform simple changes.
+* [Goals](#goals)
+* [Instructions](#instructions)
+	* [Requirements](#requirements)
+	* [Getting information](#getting-information)
+		* [JunOS](#junos)
+		* [EOS](#eos)
+	* [Doing small changes](#doing-small-changes)
+		* [JunOS](#junos-1)
+		* [EOS](#eos-1)
+* [Summary](#summary)
 
-Requirements
-------------
+# Goals
 
-    pip install -r requirements.txt
+In this tutorial we are going to:
 
-Getting information
-===================
+1. connect to the devices in via their respective APIs
+2. retrieve information from the devices such as the serial number, model, etc.
+3. perform a simple change on the device; change the hostname.
 
-JunOS
------
+# Instructions
+
+## Getting information
+
+### JunOS
 
     from jnpr.junos import Device
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+
     junos = Device(host='127.0.0.1', user='vagrant', port=12203)
     junos.open()
     junos_facts = junos.facts
-    print(junos_facts)
+    pp.pprint(junos_facts)
     junos.close()
 
-EOS
----
+### EOS
 
     import pyeapi
-    connection = pyeapi.client.connect(
-        transport='https',
-        host='127.0.0.1',
-        username='vagrant',
-        password='vagrant',
-        port=12443,
-    )
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+    connection = pyeapi.client.connect(transport='https', host='127.0.0.1', username='vagrant', password='vagrant', port=12443,)
     eos = pyeapi.client.Node(connection)
     eos_facts = eos.run_commands(['show version'])
-    print(eos_facts)
+    pp.pprint(eos_facts)
 
-Doing small changes
-===================
+## Doing small changes
 
-JunOS
------
+### JunOS
 
     from jnpr.junos import Device
     from jnpr.junos.utils.config import Config
@@ -58,8 +66,7 @@ JunOS
 
 
 
-EOS
----
+### EOS
 
     import pyeapi
     connection = pyeapi.client.connect(
@@ -73,3 +80,5 @@ EOS
     print(eos.run_commands(['show hostname'])[0]['hostname'])
     eos.run_commands(['configure', 'hostname a-new-hostname'])
     print(eos.run_commands(['show hostname'])[0]['hostname'])
+
+# Summary

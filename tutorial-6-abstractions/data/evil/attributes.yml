@@ -1,0 +1,20 @@
+---
+attributes:
+  Device:
+    os: {}
+    host: {}
+    user: {}
+    password:
+      constraints:
+        allow_empty: true
+    port: {}
+    asn: {}
+    router_id: {}
+    domain: {}
+  Network:
+    type: {}
+    service: {}
+  Interface:
+    link_type: {}
+    connects_to_device: {}
+    connects_to_iface: {}

@@ -1,0 +1,59 @@
+<p>In this tutorial we are going to perform exactly the same tasks we did on the previous tutorial. However, this time we will use napalm.</p>
+<h1 id="getting-information">Getting information</h1>
+<pre><code>from napalm_base import get_network_driver
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
+junos_driver =  get_network_driver(&#39;junos&#39;)
+eos_driver =  get_network_driver(&#39;eos&#39;)
+
+junos_configuration = {
+    &#39;hostname&#39;: &#39;127.0.0.1&#39;,
+    &#39;username&#39;: &#39;vagrant&#39;,
+    &#39;password&#39;: &#39;&#39;, 
+    &#39;optional_args&#39;: {&#39;port&#39;: 12203}
+}
+
+eos_configuration = {
+    &#39;hostname&#39;: &#39;127.0.0.1&#39;,
+    &#39;username&#39;: &#39;vagrant&#39;,
+    &#39;password&#39;: &#39;vagrant&#39;, 
+    &#39;optional_args&#39;: {&#39;port&#39;: 12443}
+}
+
+with junos_driver(**junos_configuration) as junos:
+    pp.pprint(junos.get_facts()) 
+
+with eos_driver(**eos_configuration) as eos:
+    pp.pprint(eos.get_facts()) </code></pre>
+<h1 id="doing-small-changes">Doing small changes</h1>
+<pre><code>from napalm_base import get_network_driver
+junos_driver =  get_network_driver(&#39;junos&#39;)
+eos_driver =  get_network_driver(&#39;eos&#39;)
+
+junos_configuration = {
+    &#39;hostname&#39;: &#39;127.0.0.1&#39;,
+    &#39;username&#39;: &#39;vagrant&#39;,
+    &#39;password&#39;: &#39;&#39;, 
+    &#39;optional_args&#39;: {&#39;port&#39;: 12203}
+}
+
+eos_configuration = {
+    &#39;hostname&#39;: &#39;127.0.0.1&#39;,
+    &#39;username&#39;: &#39;vagrant&#39;,
+    &#39;password&#39;: &#39;vagrant&#39;, 
+    &#39;optional_args&#39;: {&#39;port&#39;: 12443}
+}
+
+def change_configuration(device, configuration):
+    device.load_merge_candidate(config=configuration)
+    print(device.compare_config())
+    device.commit_config()
+
+
+with junos_driver(**junos_configuration) as junos:
+    change_configuration(junos, &quot;system {host-name yet-another-hostname;}&quot;)
+
+
+with eos_driver(**eos_configuration) as eos:
+    change_configuration(eos, &#39;hostname yet-another-hostname&#39;)</code></pre>

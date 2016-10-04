@@ -1,0 +1,42 @@
+---
+- name: Get facts
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars:
+
+  tasks:
+    - name: get facts from device
+      napalm_get_facts:
+        hostname: "{{ host }}"
+        username: "{{ user }}"
+        dev_os: "{{ os }}"
+        password: "{{ password }}"
+        optional_args:
+          port: "{{ port }}"
+        filter: ['bgp_neighbors']
+      register: napalm_facts
+    - name: Check all BGP sessions are configured
+      assert:
+        that:
+          - hostvars[item.value.attributes.connects_to_device]['interfaces'][item.value.attributes.connects_to_iface]['ipv6'][0].split('/')[0] in napalm_facts.ansible_facts.bgp_neighbors.global.peers
+        msg: "{{ '{}:{}'.format(item.value.attributes.connects_to_iface, item.value.attributes.connects_to_device) }} ({{ hostvars[item.value.attributes.connects_to_device]['interfaces'][item.value.attributes.connects_to_iface]['ipv6'][0].split('/')[0] }}) is missing" 
+      with_dict: "{{ interfaces }}"
+      when: "{{ item.value.attributes.link_type == 'fabric_links' }}"
+      tags: [print_action]
+    - name: Check BGP sessions are healthy
+      assert:
+        that:
+          - napalm_facts.ansible_facts.bgp_neighbors.global.peers[hostvars[item.value.attributes.connects_to_device]['interfaces'][item.value.attributes.connects_to_iface]['ipv6'][0].split('/')[0]].is_up
+        msg: "{{ '{}:{}'.format(item.value.attributes.connects_to_iface, item.value.attributes.connects_to_device) }} ({{ hostvars[item.value.attributes.connects_to_device]['interfaces'][item.value.attributes.connects_to_iface]['ipv6'][0].split('/')[0] }}) is configured but down" 
+      with_dict: "{{ interfaces }}"
+      when: "{{ item.value.attributes.link_type == 'fabric_links' }}"
+      tags: [print_action]
+    - name: Chack BGP sessions are receiving prefixes
+      assert:
+        that:
+          - napalm_facts.ansible_facts.bgp_neighbors.global.peers[hostvars[item.value.attributes.connects_to_device]['interfaces'][item.value.attributes.connects_to_iface]['ipv6'][0].split('/')[0]].address_family.ipv6.received_prefixes > 0
+        msg: "{{ '{}:{}'.format(item.value.attributes.connects_to_iface, item.value.attributes.connects_to_device) }} ({{ hostvars[item.value.attributes.connects_to_device]['interfaces'][item.value.attributes.connects_to_iface]['ipv6'][0].split('/')[0] }}) is not receiving any prefixes" 
+      with_dict: "{{ interfaces }}"
+      when: "{{ item.value.attributes.link_type == 'fabric_links' }}"
+      tags: [print_action]

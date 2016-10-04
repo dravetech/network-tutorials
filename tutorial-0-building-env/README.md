@@ -1,4 +1,21 @@
-# Requirements
+* [Goals](#goals)
+* [Instructions](#instructions)
+	* [Requirements](#requirements)
+	* [Git](#git)
+	* [Python](#python)
+	* [vagrant](#vagrant)
+		* [vagrant boxes](#vagrant-boxes)
+	* [Testing the setup](#testing-the-setup)
+	* [Demo](#demo)
+* [Summary](#summary)
+
+# Goals
+
+In this lab we are going to set up an environment that will allow us to build reproducible labs that we will be able to use throughout the upcoming tutorials.
+
+# Instructions
+
+## Requirements
 
 1. [git](https://git-scm.com/downloads)
 1. [python 2.7](https://www.python.org/downloads/)
@@ -6,21 +23,21 @@
 1. [Vagrant](https://www.vagrantup.com/docs/installation/)
 1. [virtualenvwrapper](http://virtualenvwrapper.readthedocs.io/en/latest/install.html) (optional but recommended)
 
-# Git
+## Git
 
 Installing git is very straightforward, just follow the instructions for your operating system.
 
-# Python
+## Python
 
 To install python follow the instructions for your operating system. To verify python is installed correctly open a terminal, execute the command ``python`` and then execute ``print("hello world")``.
 
 ![hello world](content/python.png)
 
-# vagrant
+## vagrant
 
 To install Vagrant install first VirtualBox and then Vagrant. In both cases follow the instructions for your operating system.
 
-## vagrant boxes
+### vagrant boxes
 
 Now we are going to need a few boxes, these boxes will help us provision clean labs every time we need them. To support the following tutorials we will use a box containining vEOS and another one containing JunOS. The main reason for this is because they are the only ones that provide them without needing to pay or contact some sales representative.
 
@@ -35,7 +52,7 @@ Then you will have to execute the following commands:
 
 ![vagrant add](content/vagrant_add.png)
 
-# Testing the setup
+## Testing the setup
 
 Now that everything is in place let's clone the repository where the tutorial lives and try to start the test lab.
 
@@ -47,8 +64,12 @@ The last command will initialize the lab. To see the description of the lab chec
 
 When you are done with the lab you can destroy it to free up resources with ``vagrant destroy``.
 
-# Demo
+## Demo
 
 Below you can find a video with the result of running this tutorial (click the gif to go to the YouTube video)
 
 [![tutorial 0 building env demo](content/tutorial_0_building_env_demo_preview.gif)](https://www.youtube.com/watch?v=aMJUDelX9cA "click me!")
+
+# Summary
+
+As you can see, building the environment wasn't hard. From now on, we will be able to destroy and recreate the lab as we require it.

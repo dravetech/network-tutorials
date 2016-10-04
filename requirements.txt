@@ -1,0 +1,9 @@
+PyYAML
+ansible==2.1.1.0
+junos-eznc
+napalm
+pyeapi
+pylama
+pynsot
+invoke
+yamllint

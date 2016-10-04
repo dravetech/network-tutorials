@@ -1,0 +1,62 @@
+---
+- name: Simple configuration
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars:
+      commit_changes: 0
+      conf_dir: "{{ playbook_dir }}/.compiled/"
+
+  pre_tasks:
+     - name: Set some global facts
+       set_fact:
+          host_dir: "{{ conf_dir}}/{{ inventory_hostname}}"
+          commit_changes: "{{ commit_changes }}"
+       changed_when: False
+     - name: Make sure there are no remains from a previous run
+       file:
+         path: "{{ host_dir }}"
+         state: absent
+       changed_when: False
+       when: commit_changes == 0
+     - name: Create folder to store configurations and diffs for/from the devices
+       file:
+         path: "{{ host_dir }}"
+         state: directory
+       changed_when: False
+       when: commit_changes == 0
+
+- name: Basic Configuration
+  hosts: all
+  connection: local
+  roles:
+    - base
+
+- name: Fabric Configuration
+  hosts: all
+  connection: local
+  roles:
+    - ipfabric
+
+  post_tasks:
+    - name: Assemble all the configuration bits
+      assemble:
+          src: "{{ host_dir }}/"
+          dest: "{{ host_dir }}/assembled.conf"
+      always_run: yes
+      changed_when: False
+      when: commit_changes == 0
+    - name: Load configuration into the device
+      napalm_install_config:
+        hostname: "{{ host }}"
+        username: "{{ user }}"
+        dev_os: "{{ os }}"
+        password: "{{ password }}"
+        optional_args:
+          port: "{{ port }}"
+        config_file: "{{ host_dir }}/assembled.conf"
+        commit_changes: "{{ commit_changes }}"
+        replace_config: false
+        get_diffs: True
+        diff_file: "{{ host_dir }}/diff"
+      tags: [print_action]

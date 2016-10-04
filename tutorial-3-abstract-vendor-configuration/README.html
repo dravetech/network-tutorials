@@ -1,0 +1,10 @@
+<p>In this tutorial we are going to perform exactly the same tasks we did on the previous tutorial. However, this time we will use napalm.</p>
+<h2 id="requirements">Requirements</h2>
+<pre><code>pip install -r requirements.txt</code></pre>
+<h1 id="getting-information">Getting information</h1>
+<pre><code>ansible-playbook playbook_facts.yml</code></pre>
+<h1 id="doing-small-changes">Doing small changes</h1>
+<pre><code>ansible-playbook playbook_configure.yml
+
+
+ansible-playbook playbook_configure.yml -e commit_changes=1</code></pre>

@@ -22,17 +22,15 @@ protocols {
   }
 }
 
-{% for interface, interface_data in interfaces.items() if interface_data.attributes.link_type == "fabric" %}
-    {% set peer = interface_data.attributes.connects_to_device %}
-    {% set peer_iface = interface_data.attributes.connects_to_iface %}
-    {% set peer_ip = hostvars[peer]['interfaces'][peer_iface]['ipv6'][0].split('/')[0] %}
-    {% set peer_asn = hostvars[peer]['asn'] %}
+{% for interface, interface_data in interfaces.items() if interface_data.attributes.link_type == "fabric_links" %}
+    {% set peer_ip = hostvars[interface_data.attributes.connects_to_device]['interfaces'][interface_data.attributes.connects_to_iface]['ipv6'][0].split('/')[0] %}
+    {% set peer_asn = hostvars[interface_data.attributes.connects_to_device]['asn'] %}
 
 protocols {
     bgp {
         group peers {
             neighbor {{ peer_ip }} {
-                description {{ peer }}:{{ peer_iface }};
+                description {{ interface_data.attributes.connects_to_device }}:{{ interface_data.attributes.connects_to_iface }};
                 peer-as {{ peer_asn }};
             }
         }
