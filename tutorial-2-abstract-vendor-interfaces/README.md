@@ -1,5 +1,6 @@
-Getting information
-===================
+# tutorial-2-abstract-vendor-interfaces
+
+## Getting information
 
     from napalm_base import get_network_driver
     import pprint
@@ -31,8 +32,7 @@ Getting information
 
 
 
-Doing small changes
-===================
+## Doing small changes
 
     from napalm_base import get_network_driver
     junos_driver =  get_network_driver('junos')
