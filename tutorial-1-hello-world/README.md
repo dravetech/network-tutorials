@@ -1,23 +1,4 @@
-* [Goals](#goals)
-* [Instructions](#instructions)
-	* [Requirements](#requirements)
-	* [Getting information](#getting-information)
-		* [JunOS](#junos)
-		* [EOS](#eos)
-	* [Doing small changes](#doing-small-changes)
-		* [JunOS](#junos-1)
-		* [EOS](#eos-1)
-* [Summary](#summary)
-
-# Goals
-
-In this tutorial we are going to:
-
-1. connect to the devices in via their respective APIs
-2. retrieve information from the devices such as the serial number, model, etc.
-3. perform a simple change on the device; change the hostname.
-
-# Instructions
+# tutorial-1-hello-world
 
 ## Getting information
 
@@ -63,9 +44,6 @@ In this tutorial we are going to:
     print(junos.facts['hostname'])
     junos.close()
     
-
-
-
 ### EOS
 
     import pyeapi
@@ -80,5 +58,3 @@ In this tutorial we are going to:
     print(eos.run_commands(['show hostname'])[0]['hostname'])
     eos.run_commands(['configure', 'hostname a-new-hostname'])
     print(eos.run_commands(['show hostname'])[0]['hostname'])
-
-# Summary

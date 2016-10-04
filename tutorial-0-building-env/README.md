@@ -1,14 +1,3 @@
-* [Goals](#goals)
-* [Instructions](#instructions)
-	* [Requirements](#requirements)
-	* [Git](#git)
-	* [Python](#python)
-	* [vagrant](#vagrant)
-		* [vagrant boxes](#vagrant-boxes)
-	* [Testing the setup](#testing-the-setup)
-	* [Demo](#demo)
-* [Summary](#summary)
-
 # Goals
 
 In this lab we are going to set up an environment that will allow us to build reproducible labs that we will be able to use throughout the upcoming tutorials.
