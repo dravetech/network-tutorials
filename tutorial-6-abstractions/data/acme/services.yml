@@ -1,3 +1,4 @@
+---
 loopbacks:
   network_ranges:
     loopbacks: 2001:db8:feed::/48

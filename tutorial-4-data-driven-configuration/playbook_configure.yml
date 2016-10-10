@@ -13,18 +13,19 @@
           host_dir: "{{ conf_dir}}/{{ inventory_hostname}}"
           commit_changes: "{{ commit_changes }}"
        changed_when: False
+       always_run: yes
      - name: Make sure there are no remains from a previous run
        file:
          path: "{{ host_dir }}"
          state: absent
        changed_when: False
-       when: commit_changes == 0
+       always_run: yes
      - name: Create folder to store configurations and diffs for/from the devices
        file:
          path: "{{ host_dir }}"
          state: directory
        changed_when: False
-       when: commit_changes == 0
+       always_run: yes
 
 - name: Basic Configuration
   hosts: all
@@ -55,7 +56,6 @@
         optional_args:
           port: "{{ port }}"
         config_file: "{{ host_dir }}/assembled.conf"
-        commit_changes: "{{ commit_changes }}"
         replace_config: false
         get_diffs: True
         diff_file: "{{ host_dir }}/diff"

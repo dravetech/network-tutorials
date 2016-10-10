@@ -19,12 +19,14 @@ def _process_devices(devices, sites_map, result):
         result['_meta']['hostvars'][device['hostname']] = device['attributes']
         result['_meta']['hostvars'][device['hostname']]['interfaces'] = {}
 
+
 def _resolve_cidr(address, networks):
     for network in networks:
         net = netaddr.IPNetwork(network)
         cidr = '{}/{}'.format(address, net.prefixlen)
         if address in net:
             return cidr
+
 
 def _process_interfaces(interfaces, device_map, result):
     for interface in interfaces:
@@ -39,7 +41,7 @@ def _process_interfaces(interfaces, device_map, result):
                 ipv6.append(cidr)
         interface['ipv4'] = ipv4
         interface['ipv6'] = ipv6
-        result['_meta']['hostvars'][device_map[interface['device']]]['interfaces'][interface['name']] = interface
+        result['_meta']['hostvars'][device_map[interface['device']]]['interfaces'][interface['name']] = interface  # noqa
 
 
 def main():
@@ -47,10 +49,15 @@ def main():
     api = get_api_client()
     sites = api.sites.get()
     sites_map = _build_resource_map(sites)
-    api.networks.get()
-    devices = api.devices.get()
+
+    devices = []
+    for site in sites:
+        devices += api.sites(site['id']).devices.get()
     devices_map = _build_resource_map(devices, 'hostname')
-    interfaces = api.interfaces.get()
+
+    interfaces = []
+    for site in sites:
+        interfaces += api.sites(site['id']).interfaces.get()
 
     result = {
         "_meta": {
@@ -64,12 +71,11 @@ def main():
             "children": [],
             "vars": {}
         }
-    print(devices, sites_map, result)
     _process_devices(devices, sites_map, result)
     _process_interfaces(interfaces, devices_map, result)
 
-
     return result
+
 
 if __name__ == "__main__":
     print json.dumps(main())

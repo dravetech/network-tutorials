@@ -64,12 +64,6 @@ options:
         description:
           - Path to the file to load the configuration from
         required: True
-    commit_changes:
-        description:
-          - If set to True the configuration will be actually merged or replaced. If the set to False,
-            we will not apply the changes, just check and report the diff
-        choices: [true,false]
-        required: True
     replace_config:
         description:
           - If set to True, the entire configuration on the device will be replaced during the commit.
@@ -104,7 +98,6 @@ EXAMPLES = '''
     dev_os={{ os }}
     password={{ passwd }}
     config_file=../compiled/{{ inventory_hostname }}/running.conf
-    commit_changes={{ commit_changes }}
     replace_config={{ replace_config }}
     get_diffs=True
     diff_file=../compiled/{{ inventory_hostname }}/diff
@@ -147,7 +140,6 @@ def main():
             optional_args=dict(required=False, type='dict', default=None),
             config_file=dict(type='str', required=True),
             dev_os=dict(type='str', required=True, choices=['eos', 'junos', 'iosxr', 'fortios', 'ibm', 'ios', 'nxos', 'panos']),
-            commit_changes=dict(type='bool', required=True),
             replace_config=dict(type='bool', required=False, default=False),
             diff_file=dict(type='str', required=False, default=None),
             get_diffs=dict(type='bool', required=False, default=True)
@@ -164,7 +156,6 @@ def main():
     password = module.params['password']
     timeout = module.params['timeout']
     config_file = module.params['config_file']
-    commit_changes = module.params['commit_changes']
     replace_config = module.params['replace_config']
     diff_file = module.params['diff_file']
     get_diffs = module.params['get_diffs']
@@ -206,7 +197,7 @@ def main():
         module.fail_json(msg="cannot diff config: " + str(e))
 
     try:
-        if module.check_mode or not commit_changes:
+        if module.check_mode:
             device.discard_config()
         else:
             if changed:

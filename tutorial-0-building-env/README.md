@@ -1,8 +1,4 @@
-# Goals
-
-In this lab we are going to set up an environment that will allow us to build reproducible labs that we will be able to use throughout the upcoming tutorials.
-
-# Instructions
+# tutorial-0-building-env
 
 ## Requirements
 
@@ -52,13 +48,3 @@ Now that everything is in place let's clone the repository where the tutorial li
 The last command will initialize the lab. To see the description of the lab check the contents of the file ``labs/lab1/Vagrantfile``. You should be able to connect to the vEOS and the JunOS box with the commands ``vagrant ssh eos`` and ``vagrant ssh junos`` respectively.
 
 When you are done with the lab you can destroy it to free up resources with ``vagrant destroy``.
-
-## Demo
-
-Below you can find a video with the result of running this tutorial (click the gif to go to the YouTube video)
-
-[![tutorial 0 building env demo](content/tutorial_0_building_env_demo_preview.gif)](https://www.youtube.com/watch?v=aMJUDelX9cA "click me!")
-
-# Summary
-
-As you can see, building the environment wasn't hard. From now on, we will be able to destroy and recreate the lab as we require it.

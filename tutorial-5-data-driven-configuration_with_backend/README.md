@@ -1,10 +1,3 @@
-In this tutorial we are going to perform exactly the same tasks we did on the previous tutorial. However, this time we will use napalm.
-
-Requirements
-------------
-
-    pip install -r requirements.txt
-
 Backend
 =======
 
@@ -15,7 +8,7 @@ Start NSOT
     vagrant up
     vagrant ssh
     nsot-server start
-    (input emoail/password)
+    (input email/password)
 
 Go to http://localhost:8990/users/1 and get "Secret key".
 

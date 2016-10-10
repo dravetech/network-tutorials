@@ -99,7 +99,7 @@ def _create_interface(client, site_id, device_id, iface_name, link_type,
 
 @task
 def loopbacks(ctx, site, filename="data/services.yml", debug=False):
-    """Add attributes to a site."""
+    """Read service definition for loopbacks service and add data to the backend."""
     global logger
     logger = helpers.get_logger(debug)
 
@@ -122,7 +122,7 @@ def loopbacks(ctx, site, filename="data/services.yml", debug=False):
 
 @task
 def ipfabric(ctx, site, filename="data/services.yml", debug=False):
-    """Add attributes to a site."""
+    """Read service definition for ipfabric service and add data to the backend."""
     global logger
     logger = helpers.get_logger(debug)
 

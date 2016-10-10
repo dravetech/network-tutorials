@@ -1,9 +1,5 @@
 In this tutorial we are going to perform exactly the same tasks we did on the previous tutorial. However, this time we will use napalm.
 
-Requirements
-------------
-
-    pip install -r requirements.txt
 
 inv site.create -n acme -d "Acme Corp."
 inv site.add_atribbutes -s acme -f data/acme/attributes.yml

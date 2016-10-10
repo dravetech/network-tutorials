@@ -4,4 +4,4 @@
     src: "{{ os }}/ipfabric.j2"
     dest: "{{ host_dir }}/ipfabric.conf"
   changed_when: False
-  when: commit_changes == 0
+  always_run: yes

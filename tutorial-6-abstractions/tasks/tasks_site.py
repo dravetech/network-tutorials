@@ -1,6 +1,7 @@
 """Tasks to manipulate sites"""
 
-from invoke import task
+import invoke
+
 from pynsot.client import get_api_client
 
 from pynsot.vendor.slumber.exceptions import HttpClientError
@@ -12,7 +13,7 @@ import yaml
 import sys
 
 
-@task
+@invoke.task
 def create(ctx, name, description="", debug=False):
     """Create a site."""
     global logger
@@ -35,7 +36,7 @@ def create(ctx, name, description="", debug=False):
     return site
 
 
-@task
+@invoke.task
 def add_atribbutes(ctx, site, filename="data/attributes.yml", debug=False):
     """Add attributes to a site."""
     global logger
@@ -74,7 +75,7 @@ def add_atribbutes(ctx, site, filename="data/attributes.yml", debug=False):
     return result
 
 
-@task
+@invoke.task
 def add_devices(ctx, site, filename="data/devices.yml", debug=False):
     """Add devices to a site."""
     global logger
@@ -102,3 +103,19 @@ def add_devices(ctx, site, filename="data/devices.yml", debug=False):
         result[host] = device
 
     return result
+
+
+@invoke.task
+def deploy(ctx, site, commit=False):
+    """Deploy a site."""
+    check_mode = "-C" if not commit else ""
+    cli = "ansible-playbook playbook_configure.yml -l {} {}".format(site,
+                                                                    check_mode)
+    invoke.run(cli)
+
+
+@invoke.task
+def verify(ctx, site):
+    """Verify site is healthy."""
+    cli = "ansible-playbook playbook_verify.yml -l {}".format(site)
+    invoke.run(cli)

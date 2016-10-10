@@ -1,3 +1,4 @@
+---
 devices:
   rtr00:
     os: eos

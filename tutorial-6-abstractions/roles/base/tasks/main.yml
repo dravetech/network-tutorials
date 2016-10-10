@@ -4,4 +4,4 @@
     src: "{{ os }}/simple.j2"
     dest: "{{ host_dir }}/simple.conf"
   changed_when: False
-  when: commit_changes == 0
+  always_run: true

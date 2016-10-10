@@ -1,3 +1,4 @@
+---
 loopbacks:
   network_ranges:
     loopbacks: 2001:db8:dead::/48
@@ -8,11 +9,11 @@ ipfabric:
     fabric_links: 2001:db8:c0ff::/48
   definition:
     links:
-      - left_device: rtr00
+      - left_device: evil00
         left_iface: et1
-        right_device: rtr01
+        right_device: evil01
         right_iface: ge-0/0/1
-      - left_device: rtr00
+      - left_device: evil00
         left_iface: et2
-        right_device: rtr01
+        right_device: evil01
         right_iface: ge-0/0/2
