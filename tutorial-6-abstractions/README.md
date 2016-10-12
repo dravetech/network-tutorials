@@ -8,8 +8,8 @@ inv serivce.loopbacks -s acme -f data/acme/services.yml
 inv serivce.ipfabric -s acme -f data/acme/services.yml
 
 
-ansible-playbook playbook_configure.yml -l acme
-ansible-playbook playbook_configure.yml -l acme -e commit_changes=1
+ansible-playbook playbook_configure.yml -l acme -C
+ansible-playbook playbook_configure.yml -l acme 
 
 # Uncomment data/services.yml
 inv site.create -n evil -d "Evil Corp."
@@ -18,8 +18,8 @@ inv site.add_devices -s evil -f data/evil/devices.yml
 inv serivce.loopbacks -s evil -f data/evil/services.yml
 inv serivce.ipfabric -s evil -f data/evil/services.yml
 
-ansible-playbook playbook_configure.yml -l evil
-ansible-playbook playbook_configure.yml -l evil -e commit_changes=1
+ansible-playbook playbook_configure.yml -l evil -C
+ansible-playbook playbook_configure.yml -l evil 
 
 
 # Change networks and deploy new site

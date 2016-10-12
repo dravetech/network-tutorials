@@ -4,14 +4,12 @@
   connection: local
   gather_facts: no
   vars:
-      commit_changes: 0
       conf_dir: "{{ playbook_dir }}/.compiled/"
 
   pre_tasks:
      - name: Set some global facts
        set_fact:
           host_dir: "{{ conf_dir}}/{{ inventory_hostname}}"
-          commit_changes: "{{ commit_changes }}"
        changed_when: False
        always_run: yes
      - name: Make sure there are no remains from a previous run
@@ -46,7 +44,6 @@
           dest: "{{ host_dir }}/assembled.conf"
       always_run: yes
       changed_when: False
-      when: commit_changes == 0
     - name: Load configuration into the device
       napalm_install_config:
         hostname: "{{ host }}"

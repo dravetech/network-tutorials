@@ -81,7 +81,7 @@ Getting information
 Doing small changes
 ===================
 
-    ansible-playbook playbook_configure.yml
+    ansible-playbook playbook_configure.yml -C
 
 
-    ansible-playbook playbook_configure.yml -e commit_changes=1
+    ansible-playbook playbook_configure.yml 
