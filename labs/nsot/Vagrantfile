@@ -12,7 +12,8 @@ export DEBIAN_FRONTEND=noninteractive
 sudo apt-get -y update
 sudo apt-get -y install build-essential python-dev libffi-dev libssl-dev
 sudo apt-get -y install python-pip
-sudo pip install nsot mrproxy
+sudo pip install nsot==1.0.5
+sudo pip install mrproxy
 mkdir /home/vagrant/.nsot
 nsot-server init /home/vagrant/.nsot/nsot.conf.py
 chown -R vagrant:vagrant /home/vagrant/.nsot
