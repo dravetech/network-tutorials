@@ -25,6 +25,6 @@ In this tutorial we are going to perform exactly the same tasks we did on the pr
     inv serivce.loopbacks -s evil -f data/evil/services.yml
     inv serivce.ipfabric -s evil -f data/evil/services.yml
      
-    inv site.deploy -s acme
-    inv site.deploy -s acme --commit
-    inv site.verity -s acme
+    inv site.deploy -s evil
+    inv site.deploy -s evil --commit
+    inv site.verity -s evil
