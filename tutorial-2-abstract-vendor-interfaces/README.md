@@ -1,5 +1,7 @@
 # tutorial-2-abstract-vendor-interfaces
 
+https://www.dravetech.com/presos/network_automation_tutorial.html#/6
+
 ## Getting information
 
     from napalm_base import get_network_driver

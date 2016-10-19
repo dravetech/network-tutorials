@@ -1,5 +1,7 @@
 # tutorial-1-hello-world
 
+https://www.dravetech.com/presos/network_automation_tutorial.html#/5
+
 ## Getting information
 
 ### JunOS
