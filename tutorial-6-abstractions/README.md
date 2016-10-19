@@ -13,8 +13,9 @@ In this tutorial we are going to perform exactly the same tasks we did on the pr
     inv serivce.loopbacks -s acme -f data/acme/services.yml
     inv serivce.ipfabric -s acme -f data/acme/services.yml
       
-    ansible-playbook playbook_configure.yml -l acme -C
-    ansible-playbook playbook_configure.yml -l acme 
+    inv site.deploy -s acme
+    inv site.deploy -s acme --commit
+    inv site.verity -s acme
 
 ### Uncomment data/services.yml
 
@@ -24,10 +25,6 @@ In this tutorial we are going to perform exactly the same tasks we did on the pr
     inv serivce.loopbacks -s evil -f data/evil/services.yml
     inv serivce.ipfabric -s evil -f data/evil/services.yml
      
-    ansible-playbook playbook_configure.yml -l evil -C
-    ansible-playbook playbook_configure.yml -l evil 
-
-
-###  Change networks and deploy new site
-
-inv site.create -n evil -d "My evil site"
+    inv site.deploy -s acme
+    inv site.deploy -s acme --commit
+    inv site.verity -s acme
