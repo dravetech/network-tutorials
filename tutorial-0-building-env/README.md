@@ -34,6 +34,7 @@ Then you will have to execute the following commands:
 
     vagrant box add --name vEOS-lab-4.16.6M Downloads/vEOS-lab-4.16.6M-virtualbox.box
     vagrant box add juniper/ffp-12.1X47-D20.7-packetmode
+    vagrant plugin install vagrant-host-shell
 
 ![vagrant add](content/vagrant_add.png)
 
