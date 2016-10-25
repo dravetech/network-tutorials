@@ -6,7 +6,7 @@ Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
 
 # Plugins we require
-required_plugins = %w(vagrant-junos vagrant-vbguest)
+required_plugins = %w(vagrant-junos vagrant-vbguest vagrant-host-shell)
 
 ##### START Helper functions
 def install_ssh_key()
