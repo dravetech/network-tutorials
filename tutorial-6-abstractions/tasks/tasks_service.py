@@ -137,6 +137,7 @@ def ipfabric(ctx, site, filename="data/services.yml", debug=False):
                                 site_id)['fabric_links']
 
     for link in service['definition']['links']:
+        network = None
         logger.debug("Processing {}".format(link))
         left_id = helpers.get_host_id(client, site_id, link['left_device'])
         right_id = helpers.get_host_id(client, site_id, link['right_device'])
