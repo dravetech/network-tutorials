@@ -2,9 +2,7 @@
 
 https://www.dravetech.com/presos/network_automation_tutorial.html#/10
 
-## Backend
-
-In this tutorial we are going to perform exactly the same tasks we did on the previous tutorial. However, this time we will use napalm.
+## Deploy site ACME
 
 
     inv site.create -n acme -d "Acme Corp."
@@ -17,7 +15,7 @@ In this tutorial we are going to perform exactly the same tasks we did on the pr
     inv site.deploy -s acme --commit
     inv site.verity -s acme
 
-### Uncomment data/services.yml
+### Deploy site EVIL
 
     inv site.create -n evil -d "Evil Corp."
     inv site.add_atribbutes -s evil -f data/evil/attributes.yml
