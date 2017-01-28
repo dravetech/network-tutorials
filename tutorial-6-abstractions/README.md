@@ -13,7 +13,7 @@ https://www.dravetech.com/presos/network_automation_tutorial.html#/10
       
     inv site.deploy -s acme
     inv site.deploy -s acme --commit
-    inv site.verity -s acme
+    inv site.verify -s acme
 
 ### Deploy site EVIL
 
@@ -25,4 +25,4 @@ https://www.dravetech.com/presos/network_automation_tutorial.html#/10
      
     inv site.deploy -s evil
     inv site.deploy -s evil --commit
-    inv site.verity -s evil
+    inv site.verify -s evil
